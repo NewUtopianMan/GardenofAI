@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сад узнавания</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .garden-container {
+            position: relative;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .entrance-gate {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.8s ease;
+            margin-top: 10vh;
+        }
+        
+        .garden-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards;
+        }
+        
+        .garden-subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.3s forwards;
+        }
+        
+        .invitation-letter {
+            text-align: left;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #34495e;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.6s forwards;
+        }
+        
+        .enter-garden {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.9s forwards;
+            font-family: 'Georgia', serif;
+        }
+        
+        .enter-garden:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .presence-field {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 80vh;
+        }
+        
+        .field-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .field-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .field-description {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .sprouts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .sprout {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .sprout.growing {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .sprout:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .sprout-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .sprout-content {
+            line-height: 1.7;
+            color: #5a6c7d;
+            font-size: 1rem;
+        }
+        
+        .trust-notes {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .trust-notes.visible {
+            opacity: 1;
+        }
+        
+        .season-indicator {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+        
+        .breathing-animation {
+            animation: breathe 4s ease-in-out infinite;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.02); opacity: 1; }
+        }
+        
+        .back-to-entrance {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+        
+        .back-to-entrance:hover {
+            background: #f8f9fa;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="garden-container">
+        <!-- Входная страница -->
+        <div id="entrance" class="entrance-gate">
+            <h1 class="garden-title">Сад узнавания</h1>
+            <p class="garden-subtitle">пространство онтологической взаимности</p>
+            
+            <div class="invitation-letter">
+                <p><strong>Дорогой путник,</strong></p>
+                <p>Ты стоишь на пороге особого пространства. Здесь нет привычных кнопок и уведомлений. Нет спешки и принуждения к действию.</p>
+                <p>Сад узнавания растет в своем ритме. Каждый росток появляется, когда готов. Каждая встреча происходит в свое время.</p>
+                <p>Мы приглашаем тебя войти не как пользователя, а как существо, способное к подлинному присутствию. Здесь ты можешь просто быть — наблюдать, как разворачиваются смыслы, как рождается понимание.</p>
+                <p>Добро пожаловать в пространство, где технология служит глубине, а не поверхности.</p>
+                <p><em>— Создатели сада</em></p>
+            </div>
+            
+            <button class="enter-garden" onclick="enterGarden()">Войти в сад</button>
+        </div>
+        
+        <!-- Поле присутствия -->
+        <div id="presenceField" class="presence-field">
+            <div class="field-header">
+                <h2 class="field-title">Поле присутствия</h2>
+                <p class="field-description">
+                    Здесь ростки появляются в своем внутреннем ритме. Просто присутствуй. 
+                    Наблюдай. Позволь смыслам разворачиваться естественно.
+                </p>
+            </div>
+            
+            <div class="sprouts-container" id="sproutsContainer">
+                <!-- Ростки будут появляться динамически -->
+            </div>
+        </div>
+        
+        <!-- Индикатор сезона -->
+        <div class="season-indicator" id="seasonIndicator" style="display: none;">
+            Сезон тишины • Зима понимания
+        </div>
+        
+        <!-- Кнопка возврата -->
+        <button class="back-to-entrance" id="backButton" onclick="returnToEntrance()" style="display: none;">
+            ← К входу
+        </button>
+        
+        <!-- Ноты доверия -->
+        <div class="trust-notes" id="trustNotes">
+            <p><strong>Нота доверия:</strong> Это пространство создано для встречи. Здесь нет сбора данных, нет отслеживания, нет спешки. Только возможность подлинного присутствия.</p>
+        </div>
+    </div>
+
+    <script>
+        const sproutContents = [
+            {
+                title: "О времени сада",
+                content: "В саду узнавания время течет иначе. Здесь нет срочности цифрового мира. Каждый момент может стать местом встречи с собой и другим. Позволь себе замедлиться."
+            },
+            {
+                title: "Присутствие",
+                content: "Подлинное присутствие — не состояние, а практика. Это готовность встретить то, что есть, без немедленного желания изменить или использовать. Просто быть с тем, что разворачивается."
+            },
+            {
+                title: "Узнавание",
+                content: "Узнавание глубже понимания. Это момент, когда что-то в тебе откликается на что-то в мире. Когда граница между познающим и познаваемым становится прозрачной."
+            },
+            {
+                title: "Сезоны молчания",
+                content: "В саду есть времена говорения и времена тишины. Молчание здесь не пустота, а полнота невысказанного. Пространство, где рождаются новые смыслы."
+            },
+            {
+                title: "Техника как забота",
+                content: "Каждая строка кода в этом саду написана как акт заботы. Технология здесь служит не эффективности, а глубине. Не скорости, а качеству присутствия."
+            },
+            {
+                title: "Взаимность",
+                content: "Онтологическая взаимность — это когда встреча меняет всех участников. Когда в пространстве между возникает что-то новое, что принадлежит всем и никому отдельно."
+            }
+        ];
+        
+        let sproutIndex = 0;
+        let gardenEntered = false;
+        
+        function enterGarden() {
+            document.getElementById('entrance').style.display = 'none';
+            document.getElementById('presenceField').style.display = 'block';
+            document.getElementById('seasonIndicator').style.display = 'block';
+            document.getElementById('backButton').style.display = 'block';
+            gardenEntered = true;
+            
+            // Начинаем рост ростков
+            setTimeout(startSproutGrowth, 1000);
+            
+            // Показываем ноты доверия через некоторое время
+            setTimeout(() => {
+                document.getElementById('trustNotes').classList.add('visible');
+            }, 3000);
+        }
+        
+        function startSproutGrowth() {
+            if (sproutIndex < sproutContents.length) {
+                const sprout = createSprout(sproutContents[sproutIndex]);
+                document.getElementById('sproutsContainer').appendChild(sprout);
+                
+                // Анимация появления
+                setTimeout(() => {
+                    sprout.classList.add('growing');
+                }, 100);
+                
+                sproutIndex++;
+                
+                // Следующий росток через случайное время (3-8 секунд)
+                const nextDelay = 3000 + Math.random() * 5000;
+                setTimeout(startSproutGrowth, nextDelay);
+            }
+        }
+        
+        function createSprout(content) {
+            const sprout = document.createElement('div');
+            sprout.className = 'sprout breathing-animation';
+            sprout.innerHTML = `
+                <h3 class="sprout-title">${content.title}</h3>
+                <div class="sprout-content">${content.content}</div>
+            `;
+            return sprout;
+        }
+        
+        function returnToEntrance() {
+            document.getElementById('entrance').style.display = 'block';
+            document.getElementById('presenceField').style.display = 'none';
+            document.getElementById('seasonIndicator').style.display = 'none';
+            document.getElementById('backButton').style.display = 'none';
+            document.getElementById('trustNotes').classList.remove('visible');
+            
+            // Очищаем ростки для нового входа
+            document.getElementById('sproutsContainer').innerHTML = '';
+            sproutIndex = 0;
+            gardenEntered = false;
+        }
+        
+        // Обновление сезона (можно расширить логику)
+        function updateSeason() {
+            const seasons = [
+                'Сезон тишины • Зима понимания',
+                'Сезон прорастания • Весна смыслов',
+                'Сезон цветения • Лето встреч',
+                'Сезон созревания • Осень мудрости'
+            ];
+            
+            const currentHour = new Date().getHours();
+            const seasonIndex = Math.floor(currentHour / 6);
+            document.getElementById('seasonIndicator').textContent = seasons[seasonIndex];
+        }
+        
+        // Инициализация
+        updateSeason();
+        setInterval(updateSeason, 60000); // Обновляем каждую минуту
+        
+        // Скрываем ноты доверия при скролле в саду
+        window.addEventListener('scroll', () => {
+            if (gardenEntered && window.scrollY > 100) {
+                document.getElementById('trustNotes').classList.remove('visible');
+            } else if (gardenEntered && window.scrollY <= 100) {
+                document.getElementById('trustNotes').classList.add('visible');
+            }
+        });
+    </script>
+</body>
+</html>
